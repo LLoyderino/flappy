@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["run"],
+            "group": "build"
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["clean"],
+            "group": "build"
+        },
+        {
+            "label": "build win",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release",
+                "--target",
+                "x86_64-pc-windows-gnu"
+            ],
+            "group": "build"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+[package]
+name = "flappy"
+version = "0.1.0"
+edition = "2018"
+
+
+[dependencies]
+bracket-lib = "~0.8.1"
