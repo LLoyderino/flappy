@@ -8,6 +8,11 @@ enum GameMode {
     End,
 }
 
+enum Sprites {
+    Block = 0,
+    Grass = 1,
+}
+
 const SCREEN_WIDTH: i32 = 80;
 const SCREEN_HEIGHT: i32 = 50;
 const FRAME_DURATION: f32 = 30.0;
@@ -68,13 +73,27 @@ impl Obstacle {
         let screen_x = self.x - player_x;
         let half_size = self.size / 2;
 
+        ctx.set_active_console(0);
+
         for y in 0..self.gap_y - half_size {
-            ctx.set(screen_x, y, RED, BLACK, to_cp437('/'))
+            ctx.add_sprite(
+                Rect::with_size(screen_x, y, 2, 2),
+                400 - y,
+                RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
+                Sprites::Block as usize,
+            )
         }
 
         for y in self.gap_y + half_size..SCREEN_HEIGHT {
-            ctx.set(screen_x, y, RED, BLACK, to_cp437('/'))
+            ctx.add_sprite(
+                Rect::with_size(screen_x, y, 2, 2),
+                400 - y,
+                RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
+                Sprites::Block as usize,
+            )
         }
+
+        ctx.set_active_console(1);
     }
 
     fn hit_obstacle(&self, player: &Player) -> bool {
@@ -106,14 +125,14 @@ impl State {
     }
 
     fn main_menu(&mut self, ctx: &mut BTerm) {
-        ctx.cls();
+        clear_screen(ctx);
         ctx.print_centered(5, "Welcome to Flappy Dragon");
         ctx.print_centered(8, "(P) Play game");
         ctx.print_centered(9, "(Q) Quit game");
 
         if let Some(key) = ctx.key {
             match key {
-                VirtualKeyCode::P => self.restart(),
+                VirtualKeyCode::P => self.restart(ctx),
                 VirtualKeyCode::Q => ctx.quitting = true,
                 _ => {}
             }
@@ -121,7 +140,7 @@ impl State {
     }
 
     fn play(&mut self, ctx: &mut BTerm) {
-        ctx.cls_bg(NAVY);
+        clear_screen(ctx);
         self.frame_time += ctx.frame_time_ms;
 
         if self.frame_time > FRAME_DURATION {
@@ -149,7 +168,6 @@ impl State {
     }
 
     fn dead(&mut self, ctx: &mut BTerm) {
-        ctx.cls();
         ctx.print_centered(5, "You are dead!");
         ctx.print_centered(6, &format!("Highscore: {}", self.score));
         ctx.print_centered(8, "(P) Play again");
@@ -157,14 +175,15 @@ impl State {
 
         if let Some(key) = ctx.key {
             match key {
-                VirtualKeyCode::P => self.restart(),
+                VirtualKeyCode::P => self.restart(ctx),
                 VirtualKeyCode::Q => ctx.quitting = true,
                 _ => {}
             }
         }
     }
 
-    fn restart(&mut self) {
+    fn restart(&mut self, ctx: &mut BTerm) {
+        clear_screen(ctx);
         self.player = Player::new(5, 25);
         self.frame_time = 0.0;
         self.obstacle = Obstacle::new(SCREEN_WIDTH, 0);
@@ -183,9 +202,29 @@ impl GameState for State {
     }
 }
 
+fn clear_screen(ctx: &mut BTerm) {
+    ctx.set_active_console(0);
+    ctx.cls();
+    ctx.set_active_console(1);
+    ctx.cls();
+}
+
+bracket_terminal::embedded_resource!(BLOCK, "../asset/sprite.png");
+
 fn main() -> BError {
-    let context = BTermBuilder::simple80x50()
+    bracket_terminal::link_resource!(BLOCK, "asset/sprite.png");
+
+    let context = BTermBuilder::new()
+        .with_sprite_console(80, 50, 0)
+        .with_font("terminal8x8.png", 8, 8)
+        .with_simple_console_no_bg(80, 50, "terminal8x8.png")
         .with_title("Flappy Dragon")
+        .with_sprite_sheet(
+            SpriteSheet::new("asset/sprite.png")
+                .add_sprite(Rect::with_size(0, 0, 16, 16))
+                .add_sprite(Rect::with_size(16, 0, 16, 16)),
+        )
+        .with_vsync(false)
         .build()?;
 
     main_loop(context, State::new())
