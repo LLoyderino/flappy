@@ -19,15 +19,14 @@ impl Obstacle {
         }
     }
 
-    pub fn render(&mut self, ctx: &mut BTerm, player_x: i32) {
-        let screen_x = self.x - player_x;
+    pub fn render(&mut self, ctx: &mut BTerm) {
         let half_size = self.size / 2;
 
         ctx.set_active_console(0);
 
         for y in 0..self.gap_y - half_size {
             ctx.add_sprite(
-                Rect::with_size(screen_x, y, 2, 2),
+                Rect::with_size(self.x, y, 2, 2),
                 400 - y,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
@@ -36,7 +35,7 @@ impl Obstacle {
 
         for y in self.gap_y + half_size..SCREEN_HEIGHT {
             ctx.add_sprite(
-                Rect::with_size(screen_x, y, 2, 2),
+                Rect::with_size(self.x, y, 2, 2),
                 400 - y,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
@@ -44,6 +43,10 @@ impl Obstacle {
         }
 
         ctx.set_active_console(1);
+    }
+
+    pub fn approach_player(&mut self) {
+        self.x -= 1;
     }
 
     pub fn hit_obstacle(&self, player: &Player) -> bool {

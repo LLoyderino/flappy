@@ -12,7 +12,9 @@ pub enum GameMode {
 
 pub enum Sprites {
     Block = 0,
-    //Grass = 1,
+    Grass = 1,
+    GrassTop = 2,
+    Player = 3
 }
 
 pub const SCREEN_WIDTH: i32 = 80;
@@ -59,23 +61,30 @@ impl State {
 
         if self.frame_time > FRAME_DURATION {
             self.frame_time = 0.0;
-            self.player.gravity_and_move();
+            self.player.gravity();
+            self.obstacle.approach_player();
         }
 
         if let Some(VirtualKeyCode::Space) = ctx.key {
             self.player.flap();
         }
 
-        self.player.render(ctx);
         ctx.print(1, 1, "Press SPACE to flap");
         ctx.print(1, 2, &format!("Score {}", self.score));
 
-        self.obstacle.render(ctx, self.player.x);
+        // Background rendering
+        // todo
+
+        // Obstacle rendering
+        self.obstacle.render(ctx);
         if self.player.x > self.obstacle.x {
             self.score += 1;
-            self.obstacle = Obstacle::new(self.player.x + SCREEN_WIDTH, self.score);
+            self.obstacle = Obstacle::new(SCREEN_WIDTH, self.score);
         }
 
+        // Player rendering
+        self.player.render(ctx);
+        
         if self.player.y > SCREEN_HEIGHT || self.obstacle.hit_obstacle(&self.player) {
             self.mode = GameMode::End;
         }

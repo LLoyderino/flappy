@@ -22,7 +22,9 @@ fn main() -> BError {
         .with_sprite_sheet(
             SpriteSheet::new("asset/sprite.png")
                 .add_sprite(Rect::with_size(0, 0, 16, 16))
-                .add_sprite(Rect::with_size(16, 0, 16, 16)),
+                .add_sprite(Rect::with_size(16, 0, 16, 16))
+                .add_sprite(Rect::with_size(32, 0, 16, 16))
+                .add_sprite(Rect::with_size(48, 0, 32, 16)),
         )
         .with_vsync(false)
         .build()?;
