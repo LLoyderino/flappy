@@ -6,6 +6,7 @@ use bracket_lib::prelude::*;
 mod game;
 mod obstacle;
 mod player;
+mod background;
 
 use game::State;
 
@@ -24,7 +25,8 @@ fn main() -> BError {
                 .add_sprite(Rect::with_size(0, 0, 16, 16))
                 .add_sprite(Rect::with_size(16, 0, 16, 16))
                 .add_sprite(Rect::with_size(32, 0, 16, 16))
-                .add_sprite(Rect::with_size(48, 0, 32, 16)),
+                .add_sprite(Rect::with_size(48, 0, 32, 16))
+                .add_sprite(Rect::with_size(72, 0, 16, 16)),
         )
         .with_vsync(false)
         .build()?;

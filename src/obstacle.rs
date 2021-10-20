@@ -27,7 +27,7 @@ impl Obstacle {
         for y in 0..self.gap_y - half_size {
             ctx.add_sprite(
                 Rect::with_size(self.x, y, 2, 2),
-                400 - y,
+                1,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
             );
@@ -36,7 +36,7 @@ impl Obstacle {
         for y in self.gap_y + half_size..SCREEN_HEIGHT {
             ctx.add_sprite(
                 Rect::with_size(self.x, y, 2, 2),
-                400 - y,
+                1,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
             );

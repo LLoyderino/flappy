@@ -18,12 +18,11 @@ impl Player {
     }
 
     pub fn render(&mut self, ctx: &mut BTerm) {
-        // ctx.set(0, self.y, YELLOW, BLACK, to_cp437('@'));
         ctx.set_active_console(0);
 
         ctx.add_sprite(
             Rect::with_size(self.x, self.y, 2, 1),
-            400 - self.y,
+            2,
             RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
             Sprites::Player as usize,
         );

@@ -2,6 +2,7 @@ use bracket_lib::prelude::*;
 
 use crate::obstacle::Obstacle;
 use crate::player::Player;
+use crate::background;
 
 #[allow(clippy::module_name_repetitions)]
 pub enum GameMode {
@@ -14,7 +15,8 @@ pub enum Sprites {
     Block = 0,
     Grass = 1,
     GrassTop = 2,
-    Player = 3
+    Player = 3,
+    Sky = 4
 }
 
 pub const SCREEN_WIDTH: i32 = 80;
@@ -73,7 +75,7 @@ impl State {
         ctx.print(1, 2, &format!("Score {}", self.score));
 
         // Background rendering
-        // todo
+        background::render(ctx);
 
         // Obstacle rendering
         self.obstacle.render(ctx);
