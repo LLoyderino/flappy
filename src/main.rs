@@ -1,5 +1,5 @@
-#![windows_subsystem = "windows"]
 #![warn(clippy::pedantic)]
+#![windows_subsystem = "windows"]
 
 use bracket_lib::prelude::*;
 
@@ -7,7 +7,7 @@ mod game;
 mod obstacle;
 mod player;
 
-use game::*;
+use game::State;
 
 bracket_terminal::embedded_resource!(BLOCK, "../asset/sprite.png");
 

@@ -1,8 +1,9 @@
 use bracket_lib::prelude::*;
 
-use crate::obstacle::*;
-use crate::player::*;
+use crate::obstacle::Obstacle;
+use crate::player::Player;
 
+#[allow(clippy::module_name_repetitions)]
 pub enum GameMode {
     Menu,
     Playing,

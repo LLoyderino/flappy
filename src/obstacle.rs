@@ -1,7 +1,7 @@
 use bracket_lib::prelude::*;
 
-use crate::game::*;
-use crate::player::*;
+use crate::game::{Sprites, SCREEN_HEIGHT};
+use crate::player::Player;
 
 pub struct Obstacle {
     pub x: i32,
@@ -31,7 +31,7 @@ impl Obstacle {
                 400 - y,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
-            )
+            );
         }
 
         for y in self.gap_y + half_size..SCREEN_HEIGHT {
@@ -40,7 +40,7 @@ impl Obstacle {
                 400 - y,
                 RGBA::from_f32(1.0, 1.0, 1.0, 1.0),
                 Sprites::Block as usize,
-            )
+            );
         }
 
         ctx.set_active_console(1);
